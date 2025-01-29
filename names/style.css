@@ -1,0 +1,41 @@
+:root {
+	--red: #fcfcfc;
+	--blue: #fcfcfc;
+}
+
+body,
+html {
+	padding: 0;
+	margin: 0;
+	overflow-y: hidden;
+}
+
+#main {
+	position: relative;
+}
+
+#full-overlay {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(255, 87, 87, 0);
+	transition: background-color 100ms cubic-bezier(0, 1, 0.4, 1);
+}
+
+.name {
+	position: absolute;
+	bottom: 14px;
+	right: 18px;
+	font-size: 32px;
+	transform-origin: bottom right;
+	transition: transform 100ms cubic-bezier(0, 1, 0.4, 1);
+}
+
+#name-stroke {
+	color: var(--foreground);
+	paint-order: stroke fill;
+	-webkit-text-stroke: 6px var(--foreground);
+	text-shadow: 1.3px 1.3px 0 var(--foreground);
+}

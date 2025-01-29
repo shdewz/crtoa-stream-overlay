@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../_shared/common.css">
+	<script src="../_shared/utils.js"></script>
+	<script src="../_shared/deps/countUp.js"></script>
+	<script src="../_shared/deps/reconnecting-websocket.min.js"></script>
+	<script src="../_shared/deps/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="full-overlay">
+            <div class="score-group">
+                <div class="double-text">
+                    <div id="accBase" class="scoretext base">0.00%</div>
+                    <div id="accStroke" class="scoretext stroke">0.00%</div>
+                </div>
+                <div class="double-text">
+                    <div id="comboBase" class="scoretext base">0x</div>
+                    <div id="comboStroke" class="scoretext stroke">0x</div>
+                </div>
+            </div>
+            <div class="score-group">
+                <div class="double-text">
+                    <div id="scoreBase" class="scoretext base score">0</div>
+                    <div id="scoreStroke" class="scoretext stroke score">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>

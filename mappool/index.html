@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../_shared/common.css">
+    <script src="../_shared/utils.js"></script>
+    <script src="../_shared/deps/countUp.js"></script>
+    <script src="../_shared/deps/reconnecting-websocket.min.js"></script>
+    <script src="../_shared/deps/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="controls">
+        <div class="control-label">Controls</div>
+        <div class="control-group">
+            <div class="control-button" onclick="advance('red', -1, false)">◀</div>
+            <span id="name_red">Team A</span>
+            <div class="control-button" onclick="advance('red', 1, false)">▶</div>
+        </div>
+        <div class="control-group">
+            <div class="control-button" onclick="advance('blue', -1, false)">◀</div>
+            <span id="name_blue">Team B</span>
+            <div class="control-button" onclick="advance('blue', 1, false)">▶</div>
+        </div>
+    </div>
+    <div id="main">
+        <div class="main-container" id="main_container">
+            <div class="track">
+                <div class="track-team" id="track_team_red">
+                    <div class="team-icon" id="icon_red"></div>
+                </div>
+                <div class="track-team" id="track_team_blue">
+                    <div class="team-icon" id="icon_blue"></div>
+                </div>
+            </div>
+            <div class="mappool" id="mappool">
+                <div class="mappool-cards" id="mappool_cards"></div>
+                <div class="track-maps" id="track_maps"></div>
+            </div>
+            <div class="chat">
+                <div class="chat-content" id="chat"></div>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>

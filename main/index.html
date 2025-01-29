@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="../_shared/common.css">
+	<script src="../_shared/utils.js"></script>
+	<script src="../_shared/deps/countUp.js"></script>
+	<script src="../_shared/deps/reconnecting-websocket.min.js"></script>
+	<script src="../_shared/deps/jquery.min.js"></script>
+</head>
+
+<body>
+	<div class="controls">
+		<div class="control-label">Controls</div>
+		<div class="control-button" onclick="update_bonuses()">Reload Bonuses</div>
+		<div class="control-button" onclick="reset_bonuses()">Reset (Clear) Bonuses</div>
+		<div class="control-button" onclick="resetHealth()">Reset Healths</div>
+		<div class="control-box">
+			<input class="control-input" id="hp_input_red" placeholder="0">
+			<div class="control-button" onclick="manualHealth('red')">Set Red Health</div>
+		</div>
+		<div class="control-box">
+			<input class="control-input" id="hp_input_blue" placeholder="0">
+			<div class="control-button" onclick="manualHealth('blue')">Set Blue Health</div>
+		</div>
+	</div>
+	<div id="main">
+		<div class="main-container">
+			<div class="main-row">
+				<div class="team-container red skew">
+					<div class="container-inside unskew">
+						<div class="team-bar">
+							<div class="team-icon red" id="icon_red"></div>
+							<div class="team-info">
+								<div class="team-name red" id="name_red">Team A</div>
+								<div class="team-health red">
+									<div class="team-health-progress" id="health_progress_red"></div>
+									<div class="team-health-text double-text">
+										<div class="text-stroke" id="health_text_stroke_red">0</div>
+										<div class="text-base" id="health_text_base_red">0</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="team-stats-container">
+					<div class="bonus-container red">
+						<div class="container-inside">
+							<div class="raid-bonus">
+								<div class="raid-text-container skew">
+									<div class="container-inside unskew">
+										<div class="raid-text">Raid Bonus: <span class="raid-amount red" id="raid_red">+0%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="points-container red skew">
+						<div class="container-inside unskew">
+							<div class="team-points red" id="points_red"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-row gameplay-area">
+				<div class="client-row">
+					<div class="client"></div>
+					<div class="client"></div>
+				</div>
+				<div class="progress-row">
+					<div class="progress">
+						<div class="progress-fill" id="progress_fill"></div>
+					</div>
+				</div>
+				<div class="client-row">
+					<div class="client"></div>
+					<div class="client"></div>
+				</div>
+				<div class="gameplay-score-box">
+					<div class="player-scores">
+						<div class="player-score red" id="p1_score">0</div>
+						<div class="player-score red" id="p2_score">0</div>
+					</div>
+					<div class="team-scores">
+						<div class="team-score red" id="red_score">0</div>
+						<div class="team-score blue" id="blue_score">0</div>
+					</div>
+					<div class="player-scores">
+						<div class="player-score blue" id="p3_score">0</div>
+						<div class="player-score blue" id="p4_score">0</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-row">
+				<div class="team-container blue skew">
+					<div class="container-inside unskew">
+						<div class="team-bar">
+							<div class="team-icon blue" id="icon_blue"></div>
+							<div class="team-info">
+								<div class="team-name blue" id="name_blue">Team B</div>
+								<div class="team-health blue">
+									<div class="team-health-progress" id="health_progress_blue"></div>
+									<div class="team-health-text double-text">
+										<div class="text-stroke" id="health_text_stroke_blue">0</div>
+										<div class="text-base" id="health_text_base_blue">0</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="team-stats-container blue">
+					<div class="bonus-container blue">
+						<div class="container-inside">
+							<div class="raid-bonus">
+								<div class="raid-text-container skew">
+									<div class="container-inside unskew">
+										<div class="raid-text">Raid Bonus: <span class="raid-amount blue" id="raid_blue">+0%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="points-container blue skew">
+						<div class="container-inside unskew">
+							<div class="team-points blue" id="points_blue"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="player-area">
+			<div class="player-container" id="red_players"></div>
+			<div class="player-container" id="blue_players"></div>
+			<div class="map-container">
+				<div class="map-image" id="map_image"></div>
+				<div class="map-content">
+					<div class="map-row map-top">
+						<div class="map-title" id="title"></div>
+						<div class="map-artist" id="artist"></div>
+					</div>
+					<div class="map-row map-bottom">
+						<div class="map-mapper"><span>MAPSET OWNER</span>
+							<div class="map-mapper-name" id="mapper"></div>
+						</div>
+						<div class="map-stats">
+							<div class="map-stats-row">
+								<div class="map-stat"><span>CS</span>
+									<div class="map-stat-value" id="cs">0</div>
+								</div>
+								<div class="map-stat"><span>AR</span>
+									<div class="map-stat-value" id="ar">0</div>
+								</div>
+								<div class="map-stat"><span>OD</span>
+									<div class="map-stat-value" id="od">0</div>
+								</div>
+							</div>
+							<div class="map-stats-row">
+								<div class="map-stat"><span>LGTH</span>
+									<div class="map-stat-value" id="len">00:00</div>
+								</div>
+								<div class="map-stat"><span>BPM</span>
+									<div class="map-stat-value" id="bpm">0</div>
+								</div>
+								<div class="map-stat"><span>STAR</span>
+									<div class="map-stat-value" id="sr">0</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slot-label skew" id="slot_label">
+					<div class="container-inside unskew"><div class="slot-label-text" id="map_slot">?</div></div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<script src="index.js"></script>
+</body>
+
+</html>

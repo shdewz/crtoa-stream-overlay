@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'CookieRun';
+    src: url('../_shared/fonts/CookieRun-Regular.otf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'CookieRun';
+    src: url('../_shared/fonts/CookieRun-Bold.otf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'CookieRun';
+    src: url('../_shared/fonts/CookieRun-Black.otf');
+    font-weight: 800;
+}
+
+:root {
+    font-family: 'CookieRun', sans-serif;
+    font-weight: 700;
+    --foreground: #332e51;
+    --foreground-light: #50487e;
+    --dark: #151322;
+    --light: #d8d2ff;
+    --red: #fcfcfc;
+    --blue: #fcfcfc;
+    --white: #ffffff;
+}
