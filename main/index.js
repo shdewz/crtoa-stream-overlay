@@ -75,7 +75,7 @@ socket.onmessage = async event => {
 			cache.state = data.tourney.ipcState;
 
 			if (cache.state === 4) { // results screen
-				setTimeout(() => { cache.update_results = true }, 1000);
+				setTimeout(() => { cache.update_results = true }, 2000);
 			}
 		}
 	}
