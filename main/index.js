@@ -1,5 +1,6 @@
 const cache = {
-	players_in_lobby: []
+	players_in_lobby: [],
+	last_result_update: 0
 };
 
 let stage_data, team_data, raid_data, mappool_data, settings;
@@ -81,6 +82,7 @@ socket.onmessage = async event => {
 
 	if (cache.update_results) {
 		cache.update_results = false;
+		cache.last_result_update = now;
 		console.log('updating results...');
 		const scoreDiff = Math.abs(cache.scoreRed - cache.scoreBlue);
 		const losing_team = cache.scoreRed > cache.scoreBlue ? 'blue' : 'red';
@@ -221,7 +223,7 @@ socket.onmessage = async event => {
 		if (cache.state === 3 && cache.scoreRed !== 0 && cache.scoreBlue !== 0) $('#progress_fill').css('width', `${width * 100}%`);
 	}
 
-	if (cache.scoreVisible) {
+	if (cache.scoreVisible && now - (cache.last_result_update || 0) > (20 * 1000)) {
 		cache.lastScoreUpdate = now;
 
 		const scores = [];
