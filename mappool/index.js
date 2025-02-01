@@ -83,23 +83,6 @@ socket.onmessage = async event => {
             $('#chat').prepend(chatParent);
         }
 
-        for (let i = cache.chatLen || 0; i < current_chat_len; i++) {
-            const chat = data.tourney.chat[i];
-            const body = chat.message;
-            if (body.toLowerCase().startsWith('!mp')) continue;
-
-            const player = chat.name;
-            if (player === 'BanchoBot' && body.startsWith('Match history')) continue;
-
-            const team = chat.team === 'left' ? 'red' : chat.team === 'right' ? 'blue' : chat.team;
-
-            const chatParent = $('<div></div>').addClass(`chat-message ${team}`);
-
-            chatParent.append($('<div></div>').addClass('chat-name').text(player));
-            chatParent.append($('<div></div>').addClass('chat-body').text(body));
-            $('#chat').prepend(chatParent);
-        }
-
         cache.chatLen = data.tourney.chat.length;
     }
 };
