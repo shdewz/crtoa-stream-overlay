@@ -229,7 +229,7 @@ socket.onmessage = async event => {
 			const client = data.tourney.clients[i];
 			const team = i < 2 ? 'red' : 'blue';
 			const player = players[team].find(p => p.id === client.user.id);
-			let score = client.play.score;
+			let multiplier = 1;
 
 			// apply shield if missing
 			if (player?.role === 'support' && !BONUSES[team].shield && cache.state === 3) {
@@ -238,9 +238,10 @@ socket.onmessage = async event => {
 			}
 
 			// score bonuses
-			if (player?.role === 'fighter') score *= 1.25;
-			if (player?.role !== 'support' && BONUSES[team].shield) score *= 1.05;
+			if (player?.role === 'fighter') multiplier += 0.25;
+			if (player?.role !== 'support' && BONUSES[team].shield) multiplier += 0.05;
 
+			const score = client.play.score * multiplier;
 			scores.push({ id: i, score });
 			animation[`p${i + 1}_score`].update(score);
 		}
