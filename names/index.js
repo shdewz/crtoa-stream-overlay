@@ -43,8 +43,10 @@ let background = document.getElementById('full-overlay');
 	if (align == 'left') {
 		nameText.style.right = 'unset';
 		nameText.style.left = '18px';
+		nameText.style.transformOrigin = 'bottom left';
 		nameStroke.style.right = 'unset';
 		nameStroke.style.left = '18px';
+		nameStroke.style.transformOrigin = 'bottom left';
 	}
 })();
 
