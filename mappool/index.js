@@ -6,6 +6,11 @@ const cache = {
     MAP_ROTATIONS: []
 };
 
+const players = {
+	red: [],
+	blue: []
+};
+
 let team_data, stage_data, mappool_data;
 (async () => {
     team_data = await $.getJSON('../_data/teams.json');
@@ -48,6 +53,8 @@ socket.onmessage = async event => {
             $('#name_red').text(team_obj.name);
             $('#icon_red').css('background-image', `url('../_shared/assets/teams/${team_obj.name}.png')`);
             document.querySelector(':root').style.setProperty('--red', team_obj.color);
+
+            players.red = team_obj.players;
         }
     }
 
@@ -59,10 +66,13 @@ socket.onmessage = async event => {
             $('#name_blue').text(team_obj.name);
             $('#icon_blue').css('background-image', `url('../_shared/assets/teams/${team_obj.name}.png')`);
             document.querySelector(':root').style.setProperty('--blue', team_obj.color);
+
+            players.blue = team_obj.players;
+            cache.players_ready = true;
         }
     }
 
-    if (cache.chatLen !== data.tourney.chat.length) {
+    if (cache.chatLen !== data.tourney.chat.length && cache.players_ready) {
         const current_chat_len = data.tourney.chat.length;
         if (cache.chatLen === 0 || (cache.chatLen > 0 && cache.chatLen > current_chat_len)) { $('#chat').html(''); cache.chatLen = 0; }
 
@@ -74,7 +84,8 @@ socket.onmessage = async event => {
             const player = chat.name;
             if (player === 'BanchoBot' && body.startsWith('Match history')) continue;
 
-            const team = chat.team === 'left' ? 'red' : chat.team === 'right' ? 'blue' : chat.team;
+            const real_team = players.red.map(e => e.username).includes(chat.name) ? 'red' : players.blue.map(e => e.username).includes(chat.name) ? 'blue' : 'unknown';
+			const team = real_team === 'unknown' ? (chat.team === 'left' ? 'red' : chat.team === 'right' ? 'blue' : chat.team) : real_team;
 
             const chatParent = $('<div></div>').addClass(`chat-message ${team}`);
 
