@@ -88,12 +88,21 @@ socket.onmessage = async event => {
 		const losing_team = cache.scoreRed > cache.scoreBlue ? 'blue' : 'red';
 		let multiplier = 1;
 
+		const bonuses_before = JSON.parse(JSON.stringify(BONUSES));
 		if (BONUSES[losing_team].shield) {
 			multiplier = 0.7;
 			toggle_shield(losing_team, false);
 		}
 		const damage = scoreDiff * multiplier;
-		console.log({ damage, current: HEALTH[losing_team] });
+
+		console.log({
+			red_score: cache.scoreRed,
+			blue_score: cache.scoreBlue,
+			damage,
+			hp_before: HEALTH[losing_team],
+			bonuses: bonuses_before
+		});
+
 		set_health(losing_team, Math.max(0, HEALTH[losing_team] - damage));
 
 		BONUSES.red.tagRemaining = Math.max(0, BONUSES.red.tagRemaining - 1);
@@ -130,6 +139,7 @@ socket.onmessage = async event => {
 		create_team('blue', cache.nameBlue);
 		get_health('blue');
 		update_bonuses(true);
+		cache.players_ready = true;
 	}
 
 	if (cache.bestOf !== data.tourney.bestOF) {
@@ -266,6 +276,33 @@ socket.onmessage = async event => {
 			$('#red_score').removeClass('winning');
 			$('#blue_score').removeClass('winning');
 		}
+	}
+
+	if (cache.chatLen !== data.tourney.chat.length && cache.players_ready) {
+		const current_chat_len = data.tourney.chat.length;
+		if (cache.chatLen === 0 || (cache.chatLen > 0 && cache.chatLen > current_chat_len)) { $('#chat').html(''); cache.chatLen = 0; }
+
+		// console.log(data.tourney.chat);
+
+		for (let i = cache.chatLen || 0; i < current_chat_len; i++) {
+			const chat = data.tourney.chat[i];
+			const body = chat.message;
+			if (body.toLowerCase().startsWith('!mp')) continue;
+
+			const player = chat.name;
+			if (player === 'BanchoBot' && body.startsWith('Match history')) continue;
+
+			const real_team = players.red.map(e => e.username).includes(chat.name) ? 'red' : players.blue.map(e => e.username).includes(chat.name) ? 'blue' : 'unknown';
+			const team = real_team === 'unknown' ? (chat.team === 'left' ? 'red' : chat.team === 'right' ? 'blue' : chat.team) : real_team;
+
+			const chatParent = $('<div></div>').addClass(`chat-message ${team}`);
+
+			chatParent.append($('<div></div>').addClass('chat-name').text(player));
+			chatParent.append($('<div></div>').addClass('chat-body').text(body));
+			$('#chat').prepend(chatParent);
+		}
+
+		cache.chatLen = data.tourney.chat.length;
 	}
 }
 
@@ -424,4 +461,9 @@ const toggle_shield = (team, state) => {
 		localStorage.setItem(`${team}-shield`, false);
 		shields.removeClass('hidden');
 	}
+};
+
+const toggleChat = () => {
+	if ($('#chat_container').hasClass('hidden')) $('#chat_container').removeClass('hidden');
+	else $('#chat_container').addClass('hidden');
 };
