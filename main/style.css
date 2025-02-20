@@ -693,7 +693,7 @@ html {
 	background-color: #fffdf2;
     border-radius: 10px;
     font-size: 20px;
-    line-height: 24px;
+    line-height: 23.6px;
 	z-index: 20;
 	pointer-events: auto;
 	opacity: 1;
@@ -721,7 +721,7 @@ html {
     font-weight: 500
 }
 
-.chat-message:nth-of-type(n+9) {
+.chat-message:nth-of-type(n+29) {
 	display: none;
 }
 
