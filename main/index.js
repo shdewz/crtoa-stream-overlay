@@ -258,8 +258,12 @@ socket.onmessage = async event => {
 			animation[`p${i + 1}_score`].update(score);
 		}
 
-		cache.scoreRed = scores.filter(s => [0, 1].includes(s.id)).map(s => s.score).reduce((a, b) => a + b) * BONUSES.red.raid * (BONUSES.red.tagRemaining > 0 ? 1.2 : 1);
-		cache.scoreBlue = scores.filter(s => [2, 3].includes(s.id)).map(s => s.score).reduce((a, b) => a + b) * BONUSES.blue.raid * (BONUSES.blue.tagRemaining > 0 ? 1.2 : 1);
+		const tb = cache.map.identifier === 'TB';
+		const redTag = BONUSES.red.tagRemaining > 0 ? (tb ? 1.1 : 1.2) : 1
+		const blueTag = BONUSES.blue.tagRemaining > 0 ? (tb ? 1.1 : 1.2) : 1
+
+		cache.scoreRed = scores.filter(s => [0, 1].includes(s.id)).map(s => s.score).reduce((a, b) => a + b) * BONUSES.red.raid * redTag;
+		cache.scoreBlue = scores.filter(s => [2, 3].includes(s.id)).map(s => s.score).reduce((a, b) => a + b) * BONUSES.blue.raid * blueTag;
 
 		animation.red_score.update(cache.scoreRed);
 		animation.blue_score.update(cache.scoreBlue);
