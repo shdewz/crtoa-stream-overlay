@@ -340,6 +340,13 @@ const resetHealth = () => {
 	get_health('blue');
 };
 
+const toggleTag = team => {
+	const current = BONUSES[team].tagRemaining;
+	if (current === 0) BONUSES[team].tagRemaining = 2;
+	else BONUSES[team].tagRemaining = current - 1;
+	update_bonuses();
+};
+
 const getModStats = (cs_raw, ar_raw, od_raw, bpm_raw, mods) => {
 	mods = mods.replace('NC', 'DT');
 
@@ -443,6 +450,9 @@ const update_bonuses = (initial = false) => {
 
 	if (BONUSES.blue.shield) $('.shield-blue').removeClass('hidden');
 	else $('.shield-blue').addClass('hidden');
+
+	$('#red_tag_button').text(BONUSES.red.tagRemaining);
+	$('#blue_tag_button').text(BONUSES.blue.tagRemaining);
 };
 
 const reset_bonuses = () => {
